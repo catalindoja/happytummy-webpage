@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { BACKEND_API_URL } from '../config/proxy.js';
 
 // Create the Markets component
 const Markets = () => {
@@ -17,7 +18,7 @@ const Markets = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/markets`);
+        const res = await axios.get(`${BACKEND_API_URL}/markets`);
         setPosts(res.data);
       } catch (err) {
         console.log(err);
@@ -54,13 +55,11 @@ const Markets = () => {
       <div className="posts">
         {posts.map((post) => (
           <div className="post" key={post.id}>
-            <div className="img">
+            <div className="post-img">
               <img src={post.image_url} alt="" />
             </div>
             <div className="content">
-              <Link className="link" to={`/markets/${post.id}`}>
-                <h1>{post.name}</h1>
-              </Link>
+              <h1>{post.name}</h1>
               <p>{limitText(getText(post.description), 210)}</p>
               <Link to={`/markets/${post.id}`}>
                 <button>Read More</button>

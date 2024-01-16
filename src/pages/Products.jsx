@@ -4,6 +4,8 @@ import { AuthContext } from "../context/authContext";
 import ReactPaginate from "react-paginate";
 import Heart from "../img/heart.png";
 import axios from "axios";
+import Profile from "../img/profile.png";
+import { BACKEND_API_URL } from '../config/proxy.js';
 
 // Create the Products component
 const Products = () => {
@@ -22,8 +24,7 @@ const Products = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/users`);
-        console.log(res.data)
+        const res = await axios.get(`${BACKEND_API_URL}/users`);
         setUsers(res.data);
       } catch (err) {
         console.log(err);
@@ -45,7 +46,7 @@ const Products = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/products`);
+        const res = await axios.get(`${BACKEND_API_URL}/products`);
         setPosts(res.data);
       } catch (err) {
         console.log(err);
@@ -84,35 +85,55 @@ const Products = () => {
   // Display filtered posts
   const displayFilteredPosts = filteredPosts
     .slice(pageNumber * postsPerPage, (pageNumber + 1) * postsPerPage)
-    .map((post) => (
-      <div className="post" key={post.id}>
-        <div className="img">
-          <img src={post.image_url} alt="" />
-        </div>
-        <div className="content">
-          <Link className="link" to={`/products/${post.id}`}>
-            <h1>{post.product_name}</h1>
-          </Link>
-          <p>{limitText(getText(post.product_description), 210)}</p>
-          <div className="comment-likes">
-            <img src={Heart} alt="Heart Icon" className="heart-icon" />
-            <span className="likes-count">{post.likes}</span>
-          </div>
-          <Link to={`/products/${post.id}`}>
-            <button>Read More</button>
-          </Link>
-        </div>
-      </div>
-    ));
+    .map((post) => {
+      
+      // Obtain the username
+      const userForPost = users.find(user => user.id === post.iduser);
+      const usernameToShow = userForPost ? userForPost.username : "Unknown";
 
-  const filterOptions = ["All", "Allergens", "Category", "Brand", "Supermarket"];
-  const [filterOption, setFilterOption] = useState("All");
+      return (
+        <div className="post-general" key={post.id}>
+
+          <div className="post" key={post.id}>
+
+            <div className="post-img">
+              <img src={post.image_url} alt="" />
+            </div>
+
+            <div className="content">
+
+              <h1 className="card-title">{post.product_name}</h1>
+
+              <div className="post-username-general">
+                <img src={Profile} alt="" className="post-user-icon" />
+                <h3 className="post-username">{usernameToShow}</h3>
+              </div>
+
+              <p className="post-description">{limitText(getText(post.product_description), 210)}</p>
+              <div className="comment-likes">
+                <img src={Heart} alt="Heart Icon" className="heart-icon" />
+                <span className="likes-count">{post.likes}</span>
+              </div>
+
+              <Link to={`/products/${post.id}`}>
+                <button>Read More</button>
+              </Link>
+
+            </div>
+          </div>
+
+        </div>
+      );
+    });
+
+  // const filterOptions = ["All", "Allergens", "Category", "Brand", "Supermarket"];
+  // const [filterOption, setFilterOption] = useState("All");
 
   // Display posts
   return (
     <div className="home">
       <h1 className="supertitle">Products 🛒</h1>
-      <button style={{"margin-left": "1em"}} onClick={handleNavigation}>New product</button>
+      <button className="new-post-button" onClick={handleNavigation}>New product</button>
       <div className="box">
         <div className="boxes">
           <fieldset>
@@ -126,7 +147,7 @@ const Products = () => {
           </fieldset>
         </div>
 
-        <div className="boxes">
+        {/* <div className="boxes">
           <fieldset>
             <legend>Filter</legend>
             <select
@@ -140,7 +161,7 @@ const Products = () => {
               ))}
             </select>
           </fieldset>
-        </div>
+        </div> */}
 
         <button onClick={() => setIsButtonActivated(!isButtonActivated)}>
           {isButtonActivated ? "Show all products" : "Show my products"}

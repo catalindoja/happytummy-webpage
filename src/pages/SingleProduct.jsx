@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef  } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import Edit from "../img/edit.png";
@@ -13,6 +13,7 @@ import moment from "moment";
 import DOMPurify from "dompurify";
 import ReactQuill from "react-quill";
 import './SingleProduct.css';
+import { BACKEND_API_URL } from '../config/proxy.js';
 
 // Create the SingleProduct component
 const SingleProduct = () => {
@@ -24,7 +25,7 @@ const SingleProduct = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const postId = location.pathname.split("/")[2];
-    
+
   // - post: an object that contains the details of the post
   const [post, setPost] = useState({});
 
@@ -96,7 +97,7 @@ const SingleProduct = () => {
   const submitReply = async () => {
     try {
       // Send the reply to the backend
-      await axios.post(`/comments/`, {
+      await axios.post(`${BACKEND_API_URL}/comments/`, {
         iduser: idCurrent,
         idproduct: postId,
         content: replyContent,
@@ -138,12 +139,12 @@ const SingleProduct = () => {
 
       try {
         // Obtain comments
-        const res = await axios.get(`/comments/`);
+        const res = await axios.get(`${BACKEND_API_URL}/comments/`);
         const filteredComments = res.data.filter((comment) => comment.idproduct == postId);
         setComments(filteredComments);
 
         // Obtain users who wrote the comments
-        const userPromises = filteredComments.map((comment) => axios.get(`/users/${comment.iduser}`));
+        const userPromises = filteredComments.map((comment) => axios.get(`${BACKEND_API_URL}/users/${comment.iduser}`));
         const userResponses = await Promise.all(userPromises);
 
         // Create an object that contains the details of the users who wrote the comments
@@ -159,13 +160,13 @@ const SingleProduct = () => {
         // Obtain stock and supermarkets
         try {
           // Get stock
-          const res1 = await axios.get(`/stock/`);
+          const res1 = await axios.get(`${BACKEND_API_URL}/stock/`);
           const filteredStock = res1.data.filter((stock) => stock.idproduct == postId);
           setStock(filteredStock);
 
           // Get supermarkets
           const myid = stock[0].idsupermarket
-          const res2 = await axios.get(`/markets/`);
+          const res2 = await axios.get(`${BACKEND_API_URL}/markets/`);
           const filteredMarkets = res2.data.filter((markets) => markets.id == myid);
           setMarkets(filteredMarkets[0]);
         } catch (err) {
@@ -173,28 +174,28 @@ const SingleProduct = () => {
         }
 
         // Obtain productallergies and allergies
-        const res3 = await axios.get(`/productallergies/`);
+        const res3 = await axios.get(`${BACKEND_API_URL}/productallergies/`);
         const filteredProductallergies = res3.data.filter((productallergies) => productallergies.idproduct == postId);
 
         // Obtain the IDs of the allergies
         const allergyIds = filteredProductallergies.map((productallergy) => productallergy.idallergies);
-        const res4 = await axios.get(`/allergies/`);
+        const res4 = await axios.get(`${BACKEND_API_URL}/allergies/`);
         const filteredAllergies = res4.data.filter((allergy) => allergyIds.includes(allergy.id));
         setAllergies(filteredAllergies);
 
-        const res5 = await axios.get(`/products/${postId}`);
+        const res5 = await axios.get(`${BACKEND_API_URL}/products/${postId}`);
         setPost(res5.data);
 
         // Obtain owner of the post
-        const response = await axios.get(`/users/${idOwner}`);
+        const response = await axios.get(`${BACKEND_API_URL}/users/${idOwner}`);
         setOwner(response.data);
 
         // Obtain brand of the post
-        const res6 = await axios.get(`/brands/${idBrand}`);
+        const res6 = await axios.get(`${BACKEND_API_URL}/brands/${idBrand}`);
         setBrand(res6.data);
 
         // Obtain category of the post
-        const res7 = await axios.get(`/categories/${idCategory}`);
+        const res7 = await axios.get(`${BACKEND_API_URL}/categories/${idCategory}`);
         setCategory(res7.data);
 
       } catch (err) {
@@ -205,7 +206,7 @@ const SingleProduct = () => {
     fetchData();
   }, [postId, idOwner, idBrand, idCategory]);
 
-  // Obtener texto
+  // Obtain text
   const getText = (html) => {
     const doc = new DOMParser().parseFromString(html, "text/html")
     return doc.body.textContent
@@ -214,7 +215,7 @@ const SingleProduct = () => {
   // Delete post
   const handleDelete = async () => {
     try {
-      const productResponse = await axios.delete(`/products/${post.id}`);
+      const productResponse = await axios.delete(`${BACKEND_API_URL}/products/${post.id}`);
       navigate("/")
     } catch (err) {
       if (err.response) {
@@ -230,12 +231,12 @@ const SingleProduct = () => {
   // Write new comment
   const state = useLocation().state;
   const [value, setValue] = useState(state?.newComment || "");
-  
+
   // Post comment
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      const productResponse = await axios.post(`/comments/`, {
+      const productResponse = await axios.post(`${BACKEND_API_URL}/comments/`, {
         iduser: idCurrent,
         idproduct: postId,
         content: value,
@@ -266,30 +267,37 @@ const SingleProduct = () => {
         <Link to="#" onClick={() => window.history.back()}>
           <img className="arrow-img" src={Arrow} alt="" />
         </Link>
-        <img className="super-image" src={post.image_url} alt="" />
+
         <div className="user">
           <img src={ProfilePicture} />
           <div className="info">
             <span className="username">{userOwner.username}</span>
           </div>
-          {currentUser.username === userOwner.username ? (
+
+          {currentUser.username === userOwner.username && (
             <><div className="edit">
-              <Link to={`/editpost`} state={post}>
+              <Link to={`/editproduct/${post.id}`} state={post}>
                 <img className="editimg" src={Edit} alt="" />
               </Link>
               <img className="delete" onClick={handleDelete} src={Delete} alt="" />
             </div> </>
-          ) : (
+          )}
+        </div>
+
+        <img className="super-image" src={post.image_url} alt="" />
+
+        <div className="product-info-container">
+          <h1 className="product-name">{post.product_name}</h1>
+          <div className="user">
             <div className="like">
               <button onClick={handleLikeClick}>
                 <img src={Heart} alt="Heart Icon" className="heart-icon" />
                 <span className="likes-count">{post.likes}</span>
               </button>
             </div>
-          )}
+          </div>
         </div>
 
-        <h1 className="product-name">{post.product_name}</h1>
         <p className="description"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(post.product_description),
@@ -324,10 +332,10 @@ const SingleProduct = () => {
             <span className="more-data-label">Quantity per unit:</span>
             <span className="more-data-value">{post.quantity} {post.measurement}</span>
           </div>
-          <div className="more-data-item">
+          {/* <div className="more-data-item">
             <span className="more-data-label">Price:</span>
             <span className="more-data-value">{post.price} €</span>
-          </div>
+          </div> */}
           <div className="more-data-item">
             <span className="more-data-label">Barcode:</span>
             <span className="more-data-value">{post.barcode}</span>
@@ -341,7 +349,7 @@ const SingleProduct = () => {
           ) : (
             comments.map(comment => {
               const parentComment = comments.find(c => c.id === comment.parentId);
-            
+
               return (
                 <li key={comment.id} className="comment">
                   <div className="comment-content">
@@ -403,6 +411,15 @@ const SingleProduct = () => {
             theme="snow"
             value={value}
             onChange={setValue}
+            modules={{
+              toolbar: {
+                container: [
+                  ["bold", "italic", "underline"],
+                ],
+              },
+              clipboard: { matchVisual: false },
+              mention: false,
+            }}
           />
         </div>
 

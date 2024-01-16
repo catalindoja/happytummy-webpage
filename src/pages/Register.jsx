@@ -4,6 +4,7 @@ import backgroundImage from "../img/background.png";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { BACKEND_API_URL } from '../config/proxy.js';
 
 // Create the Register component
 const Register = () => {
@@ -18,7 +19,7 @@ const Register = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/markets`);
+        const res = await axios.get(`${BACKEND_API_URL}/markets`);
         // console.log(res.data)
         setMarkets(res.data);
       } catch (err) {
@@ -83,7 +84,7 @@ const Register = () => {
     }
 
     try {
-      await axios.post("/register", inputs);
+      await axios.post(`${BACKEND_API_URL}/register`, inputs);
       navigate("/login");
     } catch (err) {
       setError(err.response.data);

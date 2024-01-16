@@ -6,6 +6,7 @@ import axios from 'axios';
 import Edit from "../img/edit.png";
 import Delete from "../img/delete.png";
 import ProfilePicture from "../img/profile.png";
+import { BACKEND_API_URL } from '../config/proxy.js';
 
 // Create the Profile component
 const Profile = () => {
@@ -19,7 +20,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`/markets/${currentUser.idsupermarket}`);
+                const response = await axios.get(`${BACKEND_API_URL}/markets/${currentUser.idsupermarket}`);
                 const data = response.data;
                 setMarketNameUser(data);
             } catch (err) {
@@ -44,7 +45,8 @@ const Profile = () => {
         <div className="personal-profile">
             <h1 className="supertitle">Profile 😉 </h1>
             <div>
-                <h2 className="heading">Personal data <img className="editimg" src={Edit} alt="" /> <img className="deleteimg" src={Delete} alt="" /></h2>
+                <h2 className="heading">Personal data </h2>
+                {/* <img className="editimg" src={Edit} alt="" /> <img className="deleteimg" src={Delete} alt="" /> */}
                 <div className="data">
                     <div className="item">
                         <span className="item-title">Username: </span>

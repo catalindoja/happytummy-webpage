@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import DOMPurify from "dompurify";
 import Arrow from "../img/arrow.png";
+import { BACKEND_API_URL } from '../config/proxy.js';
 
 // Create the SingleMarket component
 const SingleMarket = () => {
@@ -16,7 +17,7 @@ const SingleMarket = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`/markets/${postId}`);
+                const res = await axios.get(`${BACKEND_API_URL}/markets/${postId}`);
                 setPost(res.data);
             } catch (err) {
                 console.log(err);
@@ -28,7 +29,7 @@ const SingleMarket = () => {
     // Delete the market
     const handleDelete = async () => {
         try {
-            await axios.delete(`/markets/${post.id}`);
+            await axios.delete(`${BACKEND_API_URL}/markets/${post.id}`);
             navigate("/")
         } catch (err) {
             console.log(err);

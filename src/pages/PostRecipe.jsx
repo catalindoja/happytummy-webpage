@@ -5,6 +5,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import moment from "moment";
+import { BACKEND_API_URL } from '../config/proxy.js';
 
 // Create the PostRecepie component
 function PostRecepie() {
@@ -80,7 +81,7 @@ function PostRecepie() {
         try {
             if (!state) {
                 // Post
-                const recipeResponse = await axios.post(`/recipes/`, {
+                const recipeResponse = await axios.post(`${BACKEND_API_URL}/recipes/`, {
                     iduser,
                     title,
                     time,
@@ -94,7 +95,7 @@ function PostRecepie() {
                 });
             } else {
                 // Patch
-                const recipeResponse = await axios.patch(`/recipes/`, {
+                const recipeResponse = await axios.patch(`${BACKEND_API_URL}/recipes/`, {
                     iduser,
                     title,
                     time,

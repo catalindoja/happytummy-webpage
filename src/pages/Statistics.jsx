@@ -3,6 +3,7 @@ import { AuthContext } from "../context/authContext";
 import { useEffect } from "react";
 import axios from "axios";
 import Chart from "react-apexcharts";
+import { BACKEND_API_URL } from '../config/proxy.js';
 
 const App = () => {
 
@@ -27,7 +28,7 @@ const App = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`/markets/${currentUser.idsupermarket}`);
+                const response = await axios.get(`${BACKEND_API_URL}/markets/${currentUser.idsupermarket}`);
                 const data = response.data;
                 setMarketNameUser(data); // Actualiza el estado con el nombre del mercado
             } catch (err) {
@@ -42,7 +43,7 @@ const App = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await axios.get(`/products`);
+                const res = await axios.get(`${BACKEND_API_URL}/products`);
                 setProducts(res.data);
             } catch (err) {
                 console.log(err);
@@ -55,7 +56,7 @@ const App = () => {
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                const res = await axios.get(`/recipes`)
+                const res = await axios.get(`${BACKEND_API_URL}/recipes`)
                 setRecipes(res.data);
             } catch (err) {
                 console.log(err);
@@ -68,7 +69,7 @@ const App = () => {
     useEffect(() => {
         const fetchComments = async () => {
             try {
-                const res = await axios.get(`/comments`)
+                const res = await axios.get(`${BACKEND_API_URL}/comments`)
                 setComments(res.data);
             } catch (err) {
                 console.log(err);
@@ -81,7 +82,7 @@ const App = () => {
     useEffect(() => {
         const fetchCommentRecipes = async () => {
             try {
-                const res = await axios.get(`/commentRecipes`)
+                const res = await axios.get(`${BACKEND_API_URL}/commentRecipes`)
                 setCommentRecipes(res.data);
             } catch (err) {
                 console.log(err);
@@ -94,7 +95,7 @@ const App = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const res = await axios.get(`/users`)
+                const res = await axios.get(`${BACKEND_API_URL}/users`)
                 setUsers(res.data);
             } catch (err) {
                 console.log(err);
@@ -135,7 +136,7 @@ const App = () => {
                 userProducts += 1;
             }
         }
-    
+
         for (let i = 0; i < recipes.length; i++) {
             if (recipes[i].iduser === currentUser.id) {
                 userLikes += recipes[i].likes;
@@ -159,30 +160,30 @@ const App = () => {
         }
 
         // supermarket side of the statistics
-        for(let i = 0; i < users.length; i++) {
-            if(users[i].idsupermarket === currentUser.idsupermarket) {
-                for(let j = 0; j < products.length; j++) {
-                    if(products[j].iduser === users[i].id) {
+        for (let i = 0; i < users.length; i++) {
+            if (users[i].idsupermarket === currentUser.idsupermarket) {
+                for (let j = 0; j < products.length; j++) {
+                    if (products[j].iduser === users[i].id) {
                         supermarketLikes += products[j].likes;
                         supermarketComments += 1;
                         supermarketProducts += 1;
                     }
                 }
-                for(let j = 0; j < recipes.length; j++) {
-                    if(recipes[j].iduser === users[i].id) {
+                for (let j = 0; j < recipes.length; j++) {
+                    if (recipes[j].iduser === users[i].id) {
                         supermarketLikes += recipes[j].likes;
                         supermarketComments += 1;
                         supermarketRecipes += 1;
                     }
                 }
-                for(let j = 0; j < comments.length; j++) {
-                    if(comments[j].iduser === users[i].id) {
+                for (let j = 0; j < comments.length; j++) {
+                    if (comments[j].iduser === users[i].id) {
                         supermarketLikes += comments[j].likes;
                         supermarketComments += 1;
                     }
                 }
-                for(let j = 0; j < commentRecipes.length; j++) {
-                    if(commentRecipes[j].iduser === users[i].id) {
+                for (let j = 0; j < commentRecipes.length; j++) {
+                    if (commentRecipes[j].iduser === users[i].id) {
                         supermarketLikes += commentRecipes[j].likes;
                         supermarketComments += 1;
                     }
@@ -291,15 +292,19 @@ const App = () => {
             <p>These are the statistics of your personal profile and and the supermarket you are affiliated to.</p>
 
             <h2>Personal profile</h2>
-            <span>{currentUser.username}</span>
-            <div>
-                <Chart options={options1} series={series2} type="bar" height={450} />
+            <div className="statistics-container">
+                <span className="statistics-name">{currentUser.username}</span>
+                <div>
+                    <Chart options={options1} series={series2} type="bar" height={450} />
+                </div>
             </div>
 
             <h2>Supermarket</h2>
-            <span>{marketuser.name}</span>
-            <div>
-                <Chart options={options1} series={series1} type="bar" height={450} />
+            <div className="statistics-container">
+                <span className="statistics-name">{marketuser.name}</span>
+                <div>
+                    <Chart options={options1} series={series1} type="bar" height={450} />
+                </div>
             </div>
         </div>
     );

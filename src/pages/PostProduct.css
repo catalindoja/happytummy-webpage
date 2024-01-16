@@ -1,0 +1,162 @@
+   body {
+    background-color: #ffffff;
+    color: #333;
+  }
+  
+  .add-write {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff; 
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .supertitle-write {
+    margin-bottom: 20px;
+    margin-top: 15px;
+    margin-left: 20px;
+    color: #000 !important;
+  }
+
+  .w-100.sticky-bottom {
+    margin-top: 5px !important;
+  }
+  
+  .market-write {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .market-container-write {
+    font-weight: bold;
+    color: teal;
+  }
+  
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .editorContainer-write {
+    margin-bottom: 20px;
+  }
+  
+  .editor-write {
+    width: 100%;
+    min-height: 150px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .super-bar-code-write {
+    margin-bottom: 20px;
+  }
+  
+  .super-bar-code-write h3 {
+    font-size: 16px;
+    margin-top: -3px;
+    margin-bottom: -15px;
+  }
+  
+  .super-bar-code-write input {
+    width: calc(33.33% - 10px);
+    margin-right: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  .measurement-input {
+    margin-top: 0px;
+    display: flex;
+    align-items: center;
+  }
+
+  .measurement-input-write select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s;
+  }
+
+  .measurement-input-write select:hover {
+    border-color: #007bff;
+  }
+
+  .quantity-input-write {
+    flex: 1;
+    margin-right: 10px;
+  }
+
+  .measurement-input-write input {
+    width: 98%;
+  }
+
+  .measurement-container-write {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .custom-checkbox-write {
+    margin-right: 5px;
+  }
+
+  .boxes-write{
+    border-color: #007bff;
+  }
+
+    .boxes-write legend {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .boxes-write input[type="radio"] {
+        margin-right: 5px; 
+      }
+      
+      .boxes-write label {
+        margin-right: 10px; 
+      }
+  
+  .image-write {
+    margin-bottom: 20px;
+  }
+  
+  .image-container-write {
+    position: relative;
+  }
+  
+  .buttons-write button {
+    background-color: teal;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .error-message-write {
+    color: #ff0000;
+  }
+
+  .picture-title{
+    margin-top: 18px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+
+  

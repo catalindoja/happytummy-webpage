@@ -5,6 +5,7 @@ import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import axios from "axios";
 import moment from "moment";
+import { BACKEND_API_URL } from '../config/proxy.js';
 
 // Create the PostMarket component
 const PostMarket = () => {
@@ -48,7 +49,7 @@ const PostMarket = () => {
         try {
             if (!state) {
                 // Post
-                const marketResponse = await axios.post(`/markets/`, {
+                const marketResponse = await axios.post(`${BACKEND_API_URL}/markets/`, {
                     name,
                     description: value,
                     address,
@@ -63,7 +64,7 @@ const PostMarket = () => {
 
             } else {
                 // Patch
-                const marketResponse = await axios.patch(`/markets/${state.id}`, {
+                const marketResponse = await axios.patch(`${BACKEND_API_URL}/markets/${state.id}`, {
                     name,
                     description: value,
                     address,
